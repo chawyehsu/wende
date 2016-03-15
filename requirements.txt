@@ -1,0 +1,8 @@
+bosonnlp
+jieba
+Flask
+Flask-Bootstrap
+Flask-WTF
+numpy
+scipy
+scikit-learn
