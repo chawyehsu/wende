@@ -8,6 +8,7 @@ from wende.classification import model
 from wende.classification.preprocessing import keywords, segment
 from wende.config import SECRET_KEY, LOGGING, BOSON_API_TOKEN
 from wende.forms import QuestionForm
+from wende.utils import save_userask
 
 
 def answer_question(question):
@@ -63,6 +64,8 @@ def create_app():
         if request.method == 'POST':
             question = request.form['question']
             qtype, qcut, kwords = answer_question(question)
+            # 保存用户的问题及判断到的类型
+            save_userask(qtype, question, qcut)
             return render_template('answer.html', qtype=qtype, qcut=qcut, kwords=kwords, question=question)
 
         return render_template('index.html', form=QuestionForm())
