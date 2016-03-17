@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from os import path
 
-USERASK = path.join(path.abspath(path.dirname(__name__)), 'classification/data/user_ask.txt')
+USERASK = path.normpath(path.join(path.dirname(path.abspath(__file__)), 'classification/data/user_ask.txt'))
 
 
 def save_userask(qtype, question, qcut):

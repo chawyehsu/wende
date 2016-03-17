@@ -7,7 +7,7 @@ import jieba.analyse as jbextractor
 from os import path
 from wende.config import BOSON_API_TOKEN
 
-stopwords_path = path.join(path.abspath(path.dirname(__file__)), 'data/stopmarks.txt')
+stopwords_path = path.normpath(path.join(path.dirname(path.abspath(__file__)), 'data/stopmarks.txt'))
 jieba.setLogLevel('INFO')
 
 
