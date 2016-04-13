@@ -1,18 +1,16 @@
 # -*- coding:utf-8 -*-
 from __future__ import unicode_literals
-from os import path
-
-USERASK = path.normpath(path.join(path.dirname(path.abspath(__file__)), 'classification/data/user_ask.txt'))
+from wende.config import USER_ASK
 
 
-def save_userask(qtype, question, qcut):
+def save_userask(qtype, question, qcut=None):
     """ 保存用户的问题，可为后面做训练集增量训练
     :param qtype: 判断到问题类型（不一定为正确类型）
     :param question: 用户输入的原问题
     :param qcut: 分词后的问题
     """
-    with open(USERASK, 'a') as collector:
-        collector.write(b"{0},{1},{2}\n".format(qtype.encode('utf-8'), question.encode('utf-8'), qcut.encode('utf-8')))
+    with open(USER_ASK, 'ab') as collector:
+        collector.write(("{0},{1}\n".format(qtype, question)).encode('utf-8'))
 
 
 if __name__ == "__main__":

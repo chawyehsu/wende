@@ -1,8 +1,14 @@
-bosonnlp
-jieba
+# recommend use Anaconda
+beautifulsoup4
 Flask
 Flask-Bootstrap
 Flask-WTF
+gensim
+ipython
+jieba
+matplotlib
 numpy
-scipy
+pyltp
+requests
 scikit-learn
+scipy

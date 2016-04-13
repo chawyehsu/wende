@@ -1,2 +1,2 @@
-Wende
+Wende Chinese QA system
 ---

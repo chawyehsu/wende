@@ -22,14 +22,12 @@ __pycache__
 # Installer logs
 pip-log.txt
 
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-
 .idea/
 venv
 
 # Project-specific resources
-wende/classification/data/models
-*.pkl*
+data/user_ask.txt
+data/models/*
+!data/models/ltp_data/README.md
+!data/models/wende/README.md
+!data/models/word2vec/README.md

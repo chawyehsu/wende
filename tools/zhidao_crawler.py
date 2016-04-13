@@ -64,6 +64,6 @@ def zd_request(cid=105, pn=30, keyword=None):
 if __name__ == "__main__":
     # zd_request(cid=109, keyword="时候")
     with open(SAVING_TXT, 'ab') as zhidao:
-        for i in range(30, 330, 30):
-            j = zd_request(cid=109, keyword="哪个月", pn=i).encode('utf-8')
+        for i in range(30, 510, 30):
+            j = zd_request(cid=108, keyword="几点 开播", pn=i).encode('utf-8')
             zhidao.write(b"%s\n" % j)

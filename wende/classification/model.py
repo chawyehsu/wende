@@ -1,55 +1,70 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """ 分类模型 """
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 import argparse
 import fileinput
-import logging as log
+import logging
 from os import path
 import re
+from time import time
 import numpy
-from sklearn.cross_validation import LeaveOneOut, StratifiedKFold
+from sklearn import cross_validation
 from sklearn.datasets.base import Bunch
+from sklearn.decomposition import TruncatedSVD
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.svm import LinearSVC
 import sys
 
-# 模型存取路径
-MODEL_DIR = path.join(path.abspath(path.dirname(__file__)), "data/models")
+from .features import QuestionTrunkVectorizer, Question2VecVectorizer
+from .nlp import tokenize
+from wende.config import DATASET, APP_MODEL_DIR
 
 
 class Classifier(object):
     """ 分类器
     """
-    def __init__(self, init_data=None, model_file="classify.pkl"):
+    def __init__(self, init_data=None, model_file="classifier.pkl"):
         self.data = init_data
         self.model_file = model_file
         self.model = self.init_model()
 
     @staticmethod
-    def init_model():
-        """ 初始化分类模型（管道）
+    def init_model(clf='svm'):
+        """ 分类模型初始化
         """
-        model = Pipeline([
-            ('union', FeatureUnion([
-                # 词频特征；单字词也统计
-                ('words_count', CountVectorizer(token_pattern='(?u)\\b\\w+\\b')),
-                # TFIDF 特征；单字词也统计
-                ('words_tfidf', TfidfVectorizer(token_pattern='(?u)\\b\\w+\\b'))
+        # 多项式朴素贝叶斯
+        if clf == 'nb':
+            clf = MultinomialNB(alpha=10)
+        # 线性支持向量机
+        else:
+            clf = LinearSVC(C=0.01)
+
+        # “问题主干”特征
+        f_trunk = QuestionTrunkVectorizer(tokenizer=tokenize)
+
+        # Word2Vec 向量特征
+        f_word2vec = Question2VecVectorizer(tokenizer=tokenize)
+
+        # 最终联合特征 (400维)
+        union_features = FeatureUnion([
+            ('f_trunk_lsa', Pipeline([
+                ('trunk', f_trunk),
+                # 降维_特征抽取: 潜在语义分析 (LSA)
+                ('lsa', TruncatedSVD(n_components=200, n_iter=10))
             ])),
-            # 使用线性 SVM 分类器
-            ('clf', LinearSVC()),
+            ('f_word2vec', f_word2vec),
         ])
+
+        model = Pipeline([('union', union_features), ('clf', clf)])
         return model
 
     def train_model(self):
-        """ 训练分类模型
-        """
-        log.debug("training model...")
+        logging.debug("training model...")
+        t0 = time()
         self.model.fit(self.data.data, self.data.target)
+        print("training time cost: {}".format(time() - t0))
 
     def save_model(self, model_file=None):
         """ Save model to file with joblib's replacement of pickle. See:
@@ -57,8 +72,8 @@ class Classifier(object):
         """
         if not model_file:
             model_file = self.model_file
-        log.debug("saving model to file: " + model_file)
-        joblib.dump(self.model, path.join(MODEL_DIR, model_file))
+        logging.debug("saving model to file: " + model_file)
+        joblib.dump(self.model, path.join(APP_MODEL_DIR, model_file))
 
     def load_model(self, model_file=None):
         """ 从文件载入分类模型
@@ -67,8 +82,8 @@ class Classifier(object):
         """
         if not model_file:
             model_file = self.model_file
-        log.debug("loading model from file: " + model_file)
-        self.model = joblib.load(path.join(MODEL_DIR, model_file))
+        self.model = joblib.load(path.join(APP_MODEL_DIR, model_file))
+        logging.debug("loaded model from file: " + model_file)
         return self
 
     def predict(self, text):
@@ -76,62 +91,71 @@ class Classifier(object):
         :param text: 要进行预测的问题
         :return: 问题类型
         """
-        rv = self.model.predict([text])
-        log.debug(rv)
         qtype = self.model.predict([text])[0]
+        logging.debug("predict: {}".format(qtype))
         return qtype
 
-    def test_model(self, n_folds=10, leave_one_out=False):
-        """ Test the model by cross-validating with Stratified k-folds
+    def test_model(self, n_folds=10):
+        """ 使用 `分层K-折交叉校验（Stratified K-folds cross-validating）`
+            对模型进行测试
         """
-        log.debug("testing model ({} folds)".format(n_folds))
+        logging.debug("testing model with {}-folds CV".format(n_folds))
+        model = self.init_model()
         X = self.data.data
         y = self.data.target
-        avg_score = 0.0
 
-        if leave_one_out:
-            cv = LeaveOneOut(len(y))
-        else:
-            cv = StratifiedKFold(y, n_folds=n_folds)
+        cv = cross_validation.StratifiedKFold(y, n_folds=n_folds)
 
-        for train, test in cv:
-            model = self.init_model().fit(X[train], y[train])
-            avg_score += model.score(X[test], y[test])
+        # 准确率
+        precision = cross_validation.cross_val_score(
+            model, X, y, cv=cv, scoring='precision_weighted').mean()
+        # 召回率
+        recall = cross_validation.cross_val_score(
+            model, X, y, cv=cv, scoring='recall_weighted').mean()
+        # F1
+        t0 = time()
+        f1 = cross_validation.cross_val_score(
+            model, X, y, cv=cv, scoring='f1_weighted').mean()
+        t = time() - t0
 
-        if leave_one_out:
-            avg_score /= len(y)
-        else:
-            avg_score /= n_folds
-
-        print("average score: {}".format(avg_score))
-        return avg_score
+        print("-" * 92)
+        print("precision: {}".format(precision))
+        print("recall: {}".format(recall))
+        print("f1: {}".format(f1))
+        print("testing time cost: {}".format(t))
 
 
 def load_data(filenames):
-    """ 载入数据集
+    """ 载入训练模型用的数据集
     :param filenames: 数据集文件名
-    :return: Bunch 数据对象 See:
-    http://scikit-learn.org/stable/datasets/index.html#datasets
+    :return: Bunch 数据对象. See:
+        http://scikit-learn.org/stable/datasets/index.html#datasets
     """
+    # 训练问句文本
     data = []
+    # 训练问句的实际分类标签
     target = []
+    # 分类标签
     target_names = {}
-    # e.g. HUM,广外 校长 是 谁
+    # 数据集每一行的格式形如：HUM,广外校长是谁?
     data_re = re.compile(r'(\w+),(.+)')
 
     for line in fileinput.input(filenames):
-        d = data_re.match(line)
-        if not d:
-            raise Exception("Invalid format in file {} at line {}"
-                            .format(fileinput.filename(), fileinput.filelineno()))
-        label, text = d.group(1), d.group(2)
+        match = data_re.match(line.decode('utf-8'))
+        if not match:
+            raise Exception("Invalid format in dataset {} at line {}"
+                            .format(fileinput.filename(),
+                                    fileinput.filelineno()))
+
+        label, text = match.group(1), match.group(2)
+
         if label not in target_names:
             target_names[label] = len(target_names)
-        # 使用数字做为分类标签
-        # target.append(target_names[label])
-        # 使用原分类标签
+        # 使用原始的分类标签（`HUM`, `LOC`, etc.）
         target.append(label)
-        data.append(text.decode('utf-8'))
+        # 使用数字索引做为分类标签（{'HUM': 1, 'LOC': 2}）
+        # target.append(target_names[label])
+        data.append(text)
 
     return Bunch(
         data=numpy.array(data),
@@ -141,17 +165,24 @@ def load_data(filenames):
 
 
 if __name__ == "__main__":
-    # run from parent dir with `python -m classification.model [args]`
-    parser = argparse.ArgumentParser(description='Question type classification')
-    parser.add_argument("-t", "--test", help="test the classifier", action="store_true")
-    parser.add_argument("-s", "--save", help="save the trained model to disk", action="store_true")
-    parser.add_argument("-f", "--savefile", help="the file where the model should be saved")
-    parser.add_argument("-p", "--predict", help="classify an input question")
+    # Usage: `python -m wende.classification.model [args]`
+    parser = argparse.ArgumentParser(
+        description='Question type classification')
+    parser.add_argument("-t", "--test",
+                        help="test the classifier",
+                        action="store_true")
+    parser.add_argument("-s", "--save",
+                        help="save the trained model to file",
+                        action="store_true")
+    parser.add_argument("-f", "--savefile",
+                        help="the filename where the model should be saved")
+    parser.add_argument("-p", "--predict",
+                        help="classify an input question")
     args = parser.parse_args()
 
-    samples = path.join(path.dirname(__file__), "data/cn_trainset_seg.txt")
-    data = load_data(samples)
-    # print(data)
+    # Load dataset
+    data = load_data(DATASET)
+    print(data)
 
     if args.test:
         clf = Classifier(data)
