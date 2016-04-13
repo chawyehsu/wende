@@ -6,7 +6,7 @@ from flask.ext.bootstrap import Bootstrap
 import logging as log
 from wende.classification import model
 from wende.classification.nlp import tokenize, keywords_extract
-from wende.config import SECRET_KEY, LOGGING, BOSON_API_TOKEN
+from wende.config import SECRET_KEY, LOGGING
 from wende.forms import QuestionForm
 from wende.utils import save_userask
 
