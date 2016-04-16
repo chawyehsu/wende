@@ -66,28 +66,18 @@ def cross_predict(feat, f_name, X=X, y=y):
 # 特征
 # 基线特征 (tfidf: baseline feature)
 f_tfidf = TfidfVectorizer(tokenizer=tokenize, max_df=0.5)
-f_tfidf_chi2 = Pipeline([
-    ('tfidf', f_tfidf),
-    # 降维_特征选择: 卡方检验 (χ2)
-    ('chi2_select', SelectKBest(chi2, k=200)),
-])
 f_tfidf_lsa = Pipeline([
     ('tfidf', f_tfidf),
     # 降维_特征抽取: 潜在语义分析 (LSA)
-    ('lsa', TruncatedSVD(n_components=200, n_iter=10))
+    ('lsa', TruncatedSVD(n_components=400, n_iter=10))
 ])
 
 # “问题主干”特征
 f_trunk = QuestionTrunkVectorizer(tokenizer=tokenize)
-f_trunk_chi2 = Pipeline([
-    ('trunk', f_trunk),
-    # 降维_特征选择: 卡方检验 (χ2)
-    ('chi2_select', SelectKBest(chi2, k=200)),
-])
 f_trunk_lsa = Pipeline([
     ('trunk', f_trunk),
     # 降维_特征抽取: 潜在语义分析 (LSA)
-    ('lsa', TruncatedSVD(n_components=200, n_iter=10))
+    ('lsa', TruncatedSVD(n_components=400, n_iter=10))
 ])
 
 # Word2Vec 平均词向量特征
@@ -109,9 +99,19 @@ union_f_2 = FeatureUnion([
 ])
 
 # Do evaluation
+# Tfidf 原始维数
 cross_predict(f_tfidf, f_name='f_tfidf')
+# Tfidf LSA 降维至 400 维
+cross_predict(f_tfidf_lsa, f_name='f_tfidf_lsa')
+# Trunk 原始维数
 cross_predict(f_trunk, f_name='f_trunk')
+# Trunk LSA 降维至 400 维
+cross_predict(f_trunk_lsa, f_name='f_trunk_lsa')
+# Word2Vec 200 维
 cross_predict(f_word2vec, f_name='f_word2vec')
+# Trunk 原始维数 + Word2Vec 200 维
+cross_predict(union_f_1, f_name='union_f_1')
+# Trunk LSA 200 维 + Word2Vec 200 维
 cross_predict(union_f_2, f_name='union_f_2')
 
 

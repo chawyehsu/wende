@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
+from matplotlib.pylab import mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import cross_validation
@@ -11,6 +12,10 @@ from sklearn.svm import LinearSVC
 from wende.classification.model import load_data
 from wende.classification.nlp import tokenize
 from wende.config import DATASET
+
+#  设置 matplotlib 能显示并保存中文
+mpl.rcParams['font.sans-serif'] = ['Hiragino Sans GB']
+mpl.rcParams['axes.unicode_minus'] = False
 
 
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
