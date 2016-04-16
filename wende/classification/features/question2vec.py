@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import VectorizerMixin
 from wende.classification.nlp import tokenize
 from wende.config import WORD2VEC_MODEL_DIR, WORD2VEC_MODEL_SIZE
 
+logging.info("loading word2vec model...")
 w2v_model = gensim.models.Word2Vec.load(WORD2VEC_MODEL_DIR)
 
 

@@ -15,7 +15,7 @@ __all__ = ['named_entity_recognize']
 
 # 加载模型
 recognizer = NamedEntityRecognizer()
-ltp_model_loader.load(recognizer)
+# ltp_model_loader.load(recognizer)
 
 
 def named_entity_recognize(words, postags):

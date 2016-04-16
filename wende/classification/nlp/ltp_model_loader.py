@@ -20,7 +20,7 @@ def load(obj):
         logging.info("loading ltp segment model...")
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "cws.model")).encode('utf-8'))
-        logging.info("ltp segment model loading done in {}s."
+        logging.debug("ltp segment model loading done in {}s."
                      .format(time() - t0))
 
     # 词性标注
@@ -28,7 +28,7 @@ def load(obj):
         logging.info("loading ltp pos tagging model...")
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "pos.model")).encode('utf-8'))
-        logging.info("ltp pos tagging model loading done in {}s."
+        logging.debug("ltp pos tagging model loading done in {}s."
                      .format(time() - t0))
 
     # 句法分析
@@ -36,7 +36,7 @@ def load(obj):
         logging.info("loading ltp parser model...")
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "parser.model")).encode('utf-8'))
-        logging.info("ltp parser model loading done in {}s."
+        logging.debug("ltp parser model loading done in {}s."
                      .format(time() - t0))
 
     # 命名实体标注
@@ -44,5 +44,5 @@ def load(obj):
         logging.info("loading ltp ner model...")
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "ner.model")).encode('utf-8'))
-        logging.info("ltp ner model loading done in {}s."
+        logging.debug("ltp ner model loading done in {}s."
                      .format(time() - t0))

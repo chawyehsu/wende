@@ -5,15 +5,15 @@
 
 {% block content %}
 <div class="container">
-  <h1>Wende Chinese QA system</h1>
-  <hr>
-
-  <h2>Question: {{ question }}</h2>
-  <p>分词结果：{{ qcut }}</p>
-{#  <p>关键词表：{{ kwords }}</p>#}
-  <h2>Question type:</h2>
-    {{ qtype }}
-{#  {{ answer }}#}
-
+    <div class="row col-lg-6 col-lg-offset-3">
+        <h1 class="text-center">WCQA</h1>
+        <hr>
+        <p>
+            <h3 class="text-center">
+                {{ question }}
+                <span class="label label-default">{{ qtype }}</span>
+            </h3>
+        </p>
+    </div>
 </div>
 {% endblock %}

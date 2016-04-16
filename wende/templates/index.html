@@ -5,9 +5,32 @@
 
 {% block content %}
 <div class="container">
-  <h1>Wende Chinese QA system</h1>
-  <hr>
-  <h2>Ask a question</h2>
-  {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
+    <div class="row col-lg-6 col-lg-offset-3">
+        <h1 class="text-center">WCQA</h1>
+        <hr>
+        <p>
+            WCQA, Wende(问得) Chinese Question Answering, is a small and simple
+            factoid chinese question answering system written in Python. You ask
+            a chinese natural language question and Wende will try to give a
+            certain answer of the question. This is still a work in progress,
+            currently the system can only judge the type of the question that
+            the user ask, which means, only the question classification module
+            has been implemented.
+        </p>
+        <form method="POST" action="/">
+            {{ form.csrf_token }}
+            <div class="input-group">
+                <input type="text" name="question" class="form-control"
+                       placeholder="Ask a question with chinese.">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </span>
+            </div>
+        </form>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
 {% endblock %}

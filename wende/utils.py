@@ -14,4 +14,4 @@ def save_userask(qtype, question, qcut=None):
 
 
 if __name__ == "__main__":
-    save_userask('HUM', '中山大学 的 副校长 是 谁', '中山大学的副校长是谁？')
+    save_userask('HUM', '中山大学的副校长是谁？', '中山大学 的 副校长 是 谁')

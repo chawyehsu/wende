@@ -8,7 +8,7 @@ from os import path
 import re
 from time import time
 import numpy
-from sklearn import cross_validation
+from sklearn import cross_validation, metrics
 from sklearn.datasets.base import Bunch
 from sklearn.decomposition import TruncatedSVD
 from sklearn.externals import joblib
@@ -31,23 +31,14 @@ class Classifier(object):
         self.model = self.init_model()
 
     @staticmethod
-    def init_model(clf='svm'):
-        """ 分类模型初始化
-        """
-        # 多项式朴素贝叶斯
-        if clf == 'nb':
-            clf = MultinomialNB(alpha=10)
-        # 线性支持向量机
-        else:
-            clf = LinearSVC(C=0.01)
-
+    def init_model():
         # “问题主干”特征
         f_trunk = QuestionTrunkVectorizer(tokenizer=tokenize)
 
         # Word2Vec 向量特征
         f_word2vec = Question2VecVectorizer(tokenizer=tokenize)
 
-        # 最终联合特征 (400维)
+        # 联合特征 (400 维)
         union_features = FeatureUnion([
             ('f_trunk_lsa', Pipeline([
                 ('trunk', f_trunk),
@@ -57,14 +48,14 @@ class Classifier(object):
             ('f_word2vec', f_word2vec),
         ])
 
-        model = Pipeline([('union', union_features), ('clf', clf)])
+        model = Pipeline([('union', union_features), ('clf', LinearSVC(C=0.02))])
         return model
 
     def train_model(self):
         logging.debug("training model...")
         t0 = time()
         self.model.fit(self.data.data, self.data.target)
-        print("training time cost: {}".format(time() - t0))
+        logging.debug("training time cost: {}".format(time() - t0))
 
     def save_model(self, model_file=None):
         """ Save model to file with joblib's replacement of pickle. See:
@@ -72,7 +63,7 @@ class Classifier(object):
         """
         if not model_file:
             model_file = self.model_file
-        logging.debug("saving model to file: " + model_file)
+        logging.info("saving model to file: " + model_file)
         joblib.dump(self.model, path.join(APP_MODEL_DIR, model_file))
 
     def load_model(self, model_file=None):
@@ -83,7 +74,7 @@ class Classifier(object):
         if not model_file:
             model_file = self.model_file
         self.model = joblib.load(path.join(APP_MODEL_DIR, model_file))
-        logging.debug("loaded model from file: " + model_file)
+        logging.info("loaded model from file: " + model_file)
         return self
 
     def predict(self, text):
@@ -104,32 +95,21 @@ class Classifier(object):
         X = self.data.data
         y = self.data.target
 
-        cv = cross_validation.StratifiedKFold(y, n_folds=n_folds)
+        cv = cross_validation.StratifiedKFold(y, n_folds=n_folds, random_state=42)
 
-        # 准确率
         t0 = time()
-        accuracy = cross_validation.cross_val_score(
-            model, X, y, cv=cv, scoring='accuracy').mean()
+        y_pred = cross_validation.cross_val_predict(model, X=X, y=y, n_jobs=-1, cv=cv)
         t = time() - t0
-
-        # 精确率
-        # precision = cross_validation.cross_val_score(
-        #     model, X, y, cv=cv, scoring='precision_weighted').mean()
-
-        # 召回率
-        # recall = cross_validation.cross_val_score(
-        #     model, X, y, cv=cv, scoring='recall_weighted').mean()
-
-        # F1
-        f1 = cross_validation.cross_val_score(
-            model, X, y, cv=cv, scoring='f1_weighted').mean()
-
-        print("-" * 80)
-        print("accuracy: {}".format(accuracy))
-        # print("precision: {}".format(precision))
-        # print("recall: {}".format(recall))
-        print("f1: {}".format(f1))
-        print("testing time cost: {}".format(t))
+        print("=" * 52)
+        print("time cost: {}".format(t))
+        print()
+        print("confusion matrix\n", metrics.confusion_matrix(y, y_pred))
+        print()
+        print("\t\taccuracy: {}".format(metrics.accuracy_score(y, y_pred)))
+        print()
+        print("\t\tclassification report")
+        print("-" * 52)
+        print(metrics.classification_report(y, y_pred))
 
 
 def load_data(filenames):
@@ -189,7 +169,7 @@ if __name__ == "__main__":
 
     # Load dataset
     data = load_data(DATASET)
-    print(data)
+    # print(data)
 
     if args.test:
         clf = Classifier(data)

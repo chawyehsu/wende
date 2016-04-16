@@ -23,7 +23,7 @@ fileinput.close()
 
 # 加载模型
 segmentor = Segmentor()
-ltp_model_loader.load(segmentor)
+# ltp_model_loader.load(segmentor)
 
 
 def tokenize(question, on='jieba'):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ 问答系统 """
 from __future__ import unicode_literals
+import json
 from flask import Flask, request, render_template
 from flask.ext.bootstrap import Bootstrap
 import logging as log
@@ -72,5 +73,16 @@ def create_app():
                 question=question)
 
         return render_template('index.html', form=QuestionForm())
+
+    # API
+    @app.route('/api/classify', methods=('GET', 'POST'))
+    def api_classify():
+        if request.method == 'POST':
+            question = request.values.get('q', None)
+            qtype, qcut, kwords = answer_question(question)
+            save_userask(qtype, question, qcut)
+            return json.dumps({'error': '0', 'question': question, 'qtype': qtype})
+
+        return json.dumps({'error': '405', 'message': 'wrong request method'})
 
     return app

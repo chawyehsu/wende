@@ -73,3 +73,4 @@ LOGGING = {
 }
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger()
+logging.getLogger('gensim').setLevel('ERROR')
