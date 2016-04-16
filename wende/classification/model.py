@@ -107,20 +107,27 @@ class Classifier(object):
         cv = cross_validation.StratifiedKFold(y, n_folds=n_folds)
 
         # 准确率
-        precision = cross_validation.cross_val_score(
-            model, X, y, cv=cv, scoring='precision_weighted').mean()
-        # 召回率
-        recall = cross_validation.cross_val_score(
-            model, X, y, cv=cv, scoring='recall_weighted').mean()
-        # F1
         t0 = time()
-        f1 = cross_validation.cross_val_score(
-            model, X, y, cv=cv, scoring='f1_weighted').mean()
+        accuracy = cross_validation.cross_val_score(
+            model, X, y, cv=cv, scoring='accuracy').mean()
         t = time() - t0
 
-        print("-" * 92)
-        print("precision: {}".format(precision))
-        print("recall: {}".format(recall))
+        # 精确率
+        # precision = cross_validation.cross_val_score(
+        #     model, X, y, cv=cv, scoring='precision_weighted').mean()
+
+        # 召回率
+        # recall = cross_validation.cross_val_score(
+        #     model, X, y, cv=cv, scoring='recall_weighted').mean()
+
+        # F1
+        f1 = cross_validation.cross_val_score(
+            model, X, y, cv=cv, scoring='f1_weighted').mean()
+
+        print("-" * 80)
+        print("accuracy: {}".format(accuracy))
+        # print("precision: {}".format(precision))
+        # print("recall: {}".format(recall))
         print("f1: {}".format(f1))
         print("testing time cost: {}".format(t))
 

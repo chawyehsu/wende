@@ -25,6 +25,7 @@ USER_ASK = path.join(DATA_DIR, 'user_ask.txt')
 LTP_DATADIR = path.join(MODELS_DIR, 'ltp_data/')
 # Wor2Vec 模型路径
 WORD2VEC_MODEL_DIR = path.join(MODELS_DIR, 'word2vec/wiki_cn_word2vec.model')
+WORD2VEC_MODEL_SIZE = 200
 # Wende 模型路径
 APP_MODEL_DIR = path.join(MODELS_DIR, 'wende/')
 
@@ -49,7 +50,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
@@ -66,7 +67,7 @@ LOGGING = {
         '': {
             # 'handlers': ['file', 'console'],
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
     }
 }
