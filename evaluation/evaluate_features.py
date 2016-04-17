@@ -113,27 +113,3 @@ cross_predict(f_word2vec, f_name='f_word2vec')
 cross_predict(union_f_1, f_name='union_f_1')
 # Trunk LSA 200 维 + Word2Vec 200 维
 cross_predict(union_f_2, f_name='union_f_2')
-
-
-# t0 = time()
-# f1_score = cross_validation.cross_val_score(model, X, y, cv=cv, scoring='accuracy').mean()
-# print("time cost: {}".format(time() - t0))
-
-# Model                        F1 score        time cost
-# --------------------------------------------------------
-# Naive Bayes:
-# ========================================================
-# Feature                      F1 score        time cost
-# --------------------------------------------------------
-# f_tfidf:                  0.895163554507 / 12.4296369553  |
-# f_tfidf_chi2:             0.886842588668 / 12.3169968128  |-- baseline
-# f_tfidf_lsa:              0.891201975115 / 15.1656749249  |
-# f_trunk:                  0.907255735005 / 74.9544141293
-# f_trunk_chi2:             0.902699898010 / 76.9226009846
-# f_trunk_lsa:              0.905672947647 / 77.7997789383
-# f_word2vec:               0.793071144334 / 12.8787701130
-# f_trunk + f_word2vec:     0.932029249449 / 81.7183940411  | may because n_features increase
-# --------------------------------------------------------
-# f_trunk_lsa + f_word2vec: 0.928265493993 / 90.3578629494  | decrease n_features to 400 by using lsa on trunk feature
-
-# print("f1 score: {}".format(f1_score))
