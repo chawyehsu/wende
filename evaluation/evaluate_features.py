@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
+import os
 from time import time
 from sklearn import cross_validation
 from sklearn.decomposition import TruncatedSVD
@@ -23,6 +24,10 @@ X, y = dataset.data, dataset.target
 
 def cross_predict(feat, f_name, X=X, y=y):
 
+    if os.name == 'nt':
+        n_jobs = 1
+    else:
+        n_jobs = -1
     # 分类模型
     # clf_1 = MultinomialNB(alpha=5)
     clf_2 = LinearSVC(C=0.02)
@@ -48,7 +53,7 @@ def cross_predict(feat, f_name, X=X, y=y):
 
     model = Pipeline([('feat', feat), ('clf', clf_2)])
     t0 = time()
-    y_pred = cross_validation.cross_val_predict(model, X=X, y=y, n_jobs=-1, cv=cv)
+    y_pred = cross_validation.cross_val_predict(model, X=X, y=y, n_jobs=n_jobs, cv=cv)
     t = time() - t0
     print("=" * 20, f_name, "=" * 20)
     print("time cost: {}".format(t))

@@ -21,7 +21,7 @@ def load(obj):
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "cws.model")).encode('utf-8'))
         logging.debug("ltp segment model loading done in {}s."
-                     .format(time() - t0))
+                      .format(time() - t0))
 
     # 词性标注
     if isinstance(obj, Postagger):
@@ -29,7 +29,7 @@ def load(obj):
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "pos.model")).encode('utf-8'))
         logging.debug("ltp pos tagging model loading done in {}s."
-                     .format(time() - t0))
+                      .format(time() - t0))
 
     # 句法分析
     if isinstance(obj, Parser):
@@ -37,7 +37,7 @@ def load(obj):
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "parser.model")).encode('utf-8'))
         logging.debug("ltp parser model loading done in {}s."
-                     .format(time() - t0))
+                      .format(time() - t0))
 
     # 命名实体标注
     if isinstance(obj, NamedEntityRecognizer):
@@ -45,4 +45,4 @@ def load(obj):
         t0 = time()
         obj.load((os.path.join(LTP_DATADIR, "ner.model")).encode('utf-8'))
         logging.debug("ltp ner model loading done in {}s."
-                     .format(time() - t0))
+                      .format(time() - t0))

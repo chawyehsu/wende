@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
+import os
 from matplotlib.pylab import mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +20,11 @@ mpl.rcParams['axes.unicode_minus'] = False
 
 
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
-                        n_jobs=-1, train_sizes=np.linspace(.1, 1.0, 5)):
+                        train_sizes=np.linspace(.1, 1.0, 5)):
+    if os.name == 'nt':
+        n_jobs = 1
+    else:
+        n_jobs = -1
     plt.figure()
     plt.title(title)
     if ylim is not None:
