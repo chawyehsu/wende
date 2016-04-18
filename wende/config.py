@@ -6,7 +6,8 @@ import logging
 import logging.config
 from os import path
 
-DEBUG = True
+WEB_APP_DEBUG = False
+NLP_LOG_LEVEL = 'DEBUG'
 
 # 系统数据集合路径
 DATA_DIR = path.normpath(path.join(path.dirname(path.abspath(__file__)), '../data/'))
@@ -50,24 +51,15 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': NLP_LOG_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
-        # 'file': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.RotatingFileHandler',
-        #     'formatter': 'default',
-        #     'filename': 'wende.log',
-        #     'maxBytes': 1024,
-        #     'backupCount': 3
-        # },
     },
     'loggers': {
         '': {
-            # 'handlers': ['file', 'console'],
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': NLP_LOG_LEVEL,
         },
     }
 }
