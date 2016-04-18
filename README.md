@@ -55,8 +55,8 @@ only the question classification module has been implemented.
    ```
 
 5. 下载相关模型（LTP/Wende/Word2Vec）  
-   LTP（哈工大语言技术平台）：[百度云]，选择模型版本 3.3.0  
-   Wende & Word2Vec：请查看 [releases]，其中也可以自行训练 Wende
+   LTP（哈工大语言技术平台）：[原地址]，选择模型版本 3.3.0  
+   Wende & Word2Vec：[百度云]（密码: 1dbm），其中也可以自行训练 Wende
    的模型，具体请见 `wende/classification/model.py` 文件
    所有模型文件请放到 `data/models/` 下对应的目录
 
@@ -89,7 +89,7 @@ Data: [CC BY-NC-SA 4.0], except for the [ltp model] use its original license.
 [Microsoft Visual C++ Compiler for Python 2.7]: https://www.microsoft.com/en-us/download/details.aspx?id=44266
 [pyltp]: https://github.com/HIT-SCIR/pyltp
 [Git-Bash]: https://git-for-windows.github.io/
-[百度云]: http://pan.baidu.com/share/link?shareid=1988562907&uk=2738088569
-[releases]: https://github.com/h404bi/wende/releases
+[原地址]: http://pan.baidu.com/share/link?shareid=1988562907&uk=2738088569
+[百度云]: http://pan.baidu.com/s/1nv5ubJr
 [CC BY-NC-SA 4.0]: https://creativecommons.org/licenses/by-nc-sa/4.0/
 [ltp model]: https://github.com/HIT-SCIR/ltp#模型
