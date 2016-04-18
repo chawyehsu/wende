@@ -15,8 +15,12 @@ from wende.classification.nlp import tokenize
 from wende.config import DATASET
 
 #  设置 matplotlib 图例能显示中文（包括保存为图片）
-rcParams['font.family'] = ['WenQuanYi Micro Hei, SimHei, Hiragino Sans GB']
-rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei, SimHei, Hiragino Sans GB']
+if os.name == 'nt':
+    rcParams['font.family'] = ['SimHei']
+    rcParams['font.sans-serif'] = ['SimHei']
+else:
+    rcParams['font.family'] = ['WenQuanYi Micro Hei, Hiragino Sans GB']
+    rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei, Hiragino Sans GB']
 rcParams['axes.unicode_minus'] = False
 
 
