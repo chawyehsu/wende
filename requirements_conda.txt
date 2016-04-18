@@ -1,8 +1,3 @@
-# recommend use Anaconda
-beautifulsoup4
-Flask
-Flask-Bootstrap
-Flask-WTF
 gensim
 ipython
 matplotlib

@@ -1,1 +1,5 @@
+beautifulsoup4
+Flask
+Flask-Bootstrap
+Flask-WTF
 jieba
