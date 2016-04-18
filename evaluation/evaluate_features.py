@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
+import logging
 import os
 from time import time
 from sklearn import cross_validation
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.svm import LinearSVC
 from wende.classification.features import QuestionTrunkVectorizer, Question2VecVectorizer
@@ -15,6 +14,8 @@ from wende.classification.model import load_data
 from wende.classification.nlp import tokenize
 from wende.config import DATASET
 
+# Hide NLP debug log
+logging.getLogger().setLevel('INFO')
 
 # 数据集
 dataset = load_data(DATASET)
@@ -41,7 +42,7 @@ def cross_predict(feat, f_name, X=X, y=y):
     # that all folds will be different, although this is still
     # very likely for sizeable datasets.
     #
-    # Pass this to cross_val_predict will raise
+    # Pass this cv to cross_val_predict will raise
     # ValueError:cross_val_predict only works for partitions
     #
     # 该 cv 方法不能保证 fold 与 fold 之间的数据不重叠
