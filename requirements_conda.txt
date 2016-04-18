@@ -5,10 +5,6 @@ Flask-Bootstrap
 Flask-WTF
 gensim
 ipython
-jieba
 matplotlib
-numpy
-pyltp
 requests
 scikit-learn
-scipy
