@@ -80,7 +80,7 @@ only the question classification module has been implemented.
 Coming soon...
 
 ## License
-Code: MIT. Copyright (c) 2016 by Chawye Hsu
+Code: MIT. Copyright (c) 2016 by Chawye Hsu  
 Data: [CC BY-NC-SA 4.0], except for the [ltp model] use its original license.
 
 
