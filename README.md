@@ -81,7 +81,8 @@ Coming soon...
 
 ## License
 Code: MIT. Copyright (c) 2016 by Chawye Hsu  
-Data: [CC BY-NC-SA 4.0], except for the [ltp model] use its original license.
+Data: [CC BY-NC-SA 4.0], except for the [ltp model] use its original license.  
+这只是我的学士学位毕业设计项目（This is just the graduation project of my bachelor's degree）
 
 
 [Anaconda]: https://www.continuum.io/downloads
