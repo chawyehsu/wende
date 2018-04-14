@@ -24,6 +24,7 @@ pip-log.txt
 
 .idea/
 venv
+.vscode
 
 # Project-specific resources
 data/user_ask.txt

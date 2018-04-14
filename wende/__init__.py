@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 import json
 from flask import Flask, request, render_template
-from flask.ext.bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
 import logging as log
 from wende.classification import model
 from wende.classification.nlp import tokenize, keywords_extract

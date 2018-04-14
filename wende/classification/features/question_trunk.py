@@ -13,7 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from wende.classification.nlp import tokenize, pos_tagging, dependency_parsing
 from wende.config import INTERROGATIVE_WORD_FILE
 
-inter_words = [line.strip().decode('utf-8')
+inter_words = [line.strip()
                for line in fileinput.input(INTERROGATIVE_WORD_FILE)]
 fileinput.close()
 

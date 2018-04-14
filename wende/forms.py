@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from __future__ import unicode_literals
-from flask.ext.wtf import Form
+from flask_wtf import Form
 from wtforms import StringField
 from wtforms import SubmitField
 from wtforms.validators import DataRequired

@@ -128,7 +128,7 @@ def load_data(filenames):
     data_re = re.compile(r'(\w+),(.+)')
 
     for line in fileinput.input(filenames):
-        match = data_re.match(line.decode('utf-8'))
+        match = data_re.match(line)
         if not match:
             raise Exception("Invalid format in dataset {} at line {}"
                             .format(fileinput.filename(),

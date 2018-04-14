@@ -62,7 +62,7 @@ def pos_tagging(words):
     :param words: 分词结果
     :return: 词性标注列表
     """
-    postags = postagger.postag([i.encode('utf-8') for i in words])
-    rv = [i.decode('utf-8') for i in postags]
+    postags = postagger.postag([i for i in words])
+    rv = [i for i in postags]
     logging.debug("NLP:pos tagging: {}".format(" ".join(rv)))
     return rv
