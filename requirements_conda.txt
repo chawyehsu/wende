@@ -1,5 +1,0 @@
-gensim
-ipython
-matplotlib
-requests
-scikit-learn

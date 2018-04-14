@@ -11,6 +11,8 @@ scikit-learn = "*"
 pyltp = "==0.1.9.1"
 jieba = "*"
 gensim = "==3.0.0"
+matplotlib = "*"
+"beautifulsoup4" = "*"
 
 [dev-packages]
 
