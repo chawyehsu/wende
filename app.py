@@ -13,4 +13,4 @@ from wende.config import WEB_APP_DEBUG
 wende = create_app()
 
 if __name__ == '__main__':
-    wende.run(host='127.0.0.1', port=9191, debug=WEB_APP_DEBUG)
+    wende.run(host='0.0.0.0', port=9191, debug=WEB_APP_DEBUG)

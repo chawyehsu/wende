@@ -1,0 +1,9 @@
+version: "2.2"
+services:
+  wende:
+    build: .
+    command: pipenv run python -m app
+    ports:
+      - "9191:9191"
+    cpus: 2
+    mem_reservation: 2G
