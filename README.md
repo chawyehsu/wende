@@ -11,16 +11,26 @@ only the question classification module has been implemented.
 
 1. Download and install [Docker](https://www.docker.com/community-edition), then startup Docker.
 
-2. Clone the source, then execute `docker-compose` inside the directory.
+2. Clone the source.
    ``` sh
    $ git clone https://github.com/h404bi/wende
    $ cd wende/
+   ```
+
+3. Download the models and place them into their coresponding directories.  
+   - LTP model: http://ltp.ai/  
+   - Wende & Word2Vec: https://pan.baidu.com/s/1nv5ubJr (1dbm)  
+   
+   P.S. you can also train Wende model by yourself, see `wende/classification/model.py` for more information.
+
+4. Then execute `docker-compose` inside the directory, to build Docker image.
+   ``` sh
    $ docker-compose up
    ```
 
-3. Waiting for image building, it will take some times, after building success, open your browser and enter `127.0.0.1:9191`, boom!
+5. Waiting for image building, it will take some times, after building success, open your browser and enter `127.0.0.1:9191`, boom!
 
-4. Play with it.
+6. Play with it.
 
 ## License
 Code: MIT. Copyright (c) 2016 by Chawye Hsu  
