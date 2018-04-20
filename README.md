@@ -16,7 +16,7 @@ only the question classification module has been implemented.
    $ git clone https://github.com/h404bi/wende
    $ cd wende/
    $ docker-compose up
-   ```  
+   ```
 
 3. Waiting for image building, it will take some times, after building success, open your browser and enter `127.0.0.1:9191`, boom!
 
