@@ -4,7 +4,7 @@ from __future__ import print_function, unicode_literals
 import argparse
 import fileinput
 import logging
-from os import path
+import os
 import re
 from time import time
 import numpy
@@ -64,7 +64,7 @@ class Classifier(object):
         if not model_file:
             model_file = self.model_file
         logging.info("saving model to file: " + model_file)
-        joblib.dump(self.model, path.join(APP_MODEL_DIR, model_file))
+        joblib.dump(self.model, os.path.join(APP_MODEL_DIR, model_file))
 
     def load_model(self, model_file=None):
         """ 从文件载入分类模型
@@ -73,7 +73,7 @@ class Classifier(object):
         """
         if not model_file:
             model_file = self.model_file
-        self.model = joblib.load(path.join(APP_MODEL_DIR, model_file))
+        self.model = joblib.load(os.path.join(APP_MODEL_DIR, model_file))
         logging.info("loaded model from file: " + model_file)
         return self
 
@@ -96,9 +96,13 @@ class Classifier(object):
         y = self.data.target
 
         cv = cross_validation.StratifiedKFold(y, n_folds=n_folds, random_state=42)
+        if os.name == 'nt':
+            n_jobs = 1
+        else:
+            n_jobs = -1
 
         t0 = time()
-        y_pred = cross_validation.cross_val_predict(model, X=X, y=y, n_jobs=-1, cv=cv)
+        y_pred = cross_validation.cross_val_predict(model, X=X, y=y, n_jobs=n_jobs, cv=cv)
         t = time() - t0
         print("=" * 52)
         print("time cost: {}".format(t))
