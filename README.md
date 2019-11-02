@@ -9,7 +9,7 @@ only the question classification module has been implemented.
 
 ## Run within Docker
 
-1. Download and install [Docker](https://www.docker.com/community-edition), then startup Docker.
+1. Install and startup [Docker Desktop](https://docs.docker.com/docker-for-windows/).
 
 2. Clone the source.
    ``` sh
